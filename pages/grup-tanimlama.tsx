@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
 
 interface Patient {
   sira: number;
@@ -38,9 +38,42 @@ export default function PatientGroupForm() {
     setFormData((prev) => ({ ...prev, patientList: updatedList }));
   };
 
-  const handleSubmit = () => {
-    console.log("Form Data:", formData);
-    // Buraya API'ye POST isteği ekleyebilirsin
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch("/api/gruplar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          kod: formData.groupCode,
+          sorumlu: formData.responsible,
+          uyeler: formData.patientList.map((p) => p.name).join(";"),
+          altlar: "", // Eğer istenirse formda ayrı inputla eklenebilir
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("✅ Grup başarıyla eklendi!");
+        console.log("✅ API Yanıtı:", result);
+        setFormData({
+          groupName: "",
+          groupCode: "",
+          responsible: "",
+          patientList: [
+            { sira: 1, name: "" },
+            { sira: 2, name: "" },
+            { sira: 3, name: "" },
+          ],
+        });
+      } else {
+        console.error("❌ API Hatası:", result);
+        alert("Grup eklenirken bir hata oluştu.");
+      }
+    } catch (error) {
+      console.error("❌ Bağlantı Hatası:", error);
+      alert("Sunucuya bağlanılamadı.");
+    }
   };
 
   return (
@@ -61,7 +94,7 @@ export default function PatientGroupForm() {
             <Input
               value={formData.groupCode}
               onChange={(e) => handleChange("groupCode", e.target.value)}
-              placeholder="Örn: EG, EJ, EK"
+              placeholder="Örn: EK, EM, EN"
             />
           </div>
           <div>
@@ -69,7 +102,7 @@ export default function PatientGroupForm() {
             <Input
               value={formData.responsible}
               onChange={(e) => handleChange("responsible", e.target.value)}
-              placeholder="Ali Untucan Şimşek"
+              placeholder="Örn: Evrim Demirel"
             />
           </div>
 
@@ -80,7 +113,9 @@ export default function PatientGroupForm() {
                 <Input
                   key={index}
                   value={patient.name}
-                  onChange={(e) => handlePatientChange(index, e.target.value)}
+                  onChange={(e) =>
+                    handlePatientChange(index, e.target.value)
+                  }
                   placeholder={`#${index + 1} Hasta İsmi`}
                 />
               ))}
