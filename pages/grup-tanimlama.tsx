@@ -1,27 +1,38 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
+
+interface Patient {
+  sira: number;
+  name: string;
+}
+
+interface FormData {
+  groupName: string;
+  groupCode: string;
+  responsible: string;
+  patientList: Patient[];
+}
 
 export default function PatientGroupForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     groupName: "",
     groupCode: "",
     responsible: "",
     patientList: [
       { sira: 1, name: "" },
       { sira: 2, name: "" },
-      { sira: 3, name: "" }
-    ]
+      { sira: 3, name: "" },
+    ],
   });
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handlePatientChange = (index, value) => {
+  const handlePatientChange = (index: number, value: string) => {
     const updatedList = [...formData.patientList];
     updatedList[index].name = value;
     setFormData((prev) => ({ ...prev, patientList: updatedList }));
@@ -29,6 +40,7 @@ export default function PatientGroupForm() {
 
   const handleSubmit = () => {
     console.log("Form Data:", formData);
+    // Buraya API'ye POST isteği ekleyebilirsin
   };
 
   return (
