@@ -1,10 +1,22 @@
+import { ReactNode, HTMLAttributes } from "react";
+import clsx from "clsx";
 
-import { ReactNode } from "react";
-
-export function Card({ children }: { children: ReactNode }) {
-  return <div className="bg-white rounded-xl shadow-md p-4">{children}</div>;
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
 }
 
-export function CardContent({ children }: { children: ReactNode }) {
-  return <div className="mt-2">{children}</div>;
+export function Card({ children, className, ...props }: CardProps) {
+  return (
+    <div className={clsx("bg-white rounded-xl shadow-md", className)} {...props}>
+      {children}
+    </div>
+  );
+}
+
+export function CardContent({ children, className, ...props }: CardProps) {
+  return (
+    <div className={clsx("p-4", className)} {...props}>
+      {children}
+    </div>
+  );
 }
