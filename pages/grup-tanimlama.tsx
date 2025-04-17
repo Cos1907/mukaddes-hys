@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
-// ✅ Type tanımı en üstte!
+// Grup tipi tanımı
 interface Group {
   kod: string;
   sorumlu: string;
@@ -11,8 +11,7 @@ interface Group {
 }
 
 export default function GrupPdfGoruntuleme() {
-  // ❗️Burası çok kritik!
-  const [groups, setGroups] = useState<Group[]>([]); // ✅ Tip verildi!
+  const [groups, setGroups] = useState<Group[]>([]); // ✅ Tip belirttik!
 
   useEffect(() => {
     fetch("/api/gruplar")
