@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
+// ✅ Type tanımı en üstte!
 interface Group {
   kod: string;
   sorumlu: string;
@@ -10,7 +11,8 @@ interface Group {
 }
 
 export default function GrupPdfGoruntuleme() {
-  const [groups, setGroups] = useState<Group[]>([]); // ✅ TİP VERİLDİ!
+  // ❗️Burası çok kritik!
+  const [groups, setGroups] = useState<Group[]>([]); // ✅ Tip verildi!
 
   useEffect(() => {
     fetch("/api/gruplar")
@@ -31,7 +33,7 @@ export default function GrupPdfGoruntuleme() {
         <p className="text-gray-500">Hiç grup verisi bulunamadı.</p>
       ) : (
         <div className="grid grid-cols-1 gap-4">
-          {groups.map((group, index) => (
+          {groups.map((group: Group, index: number) => (
             <Card key={index}>
               <CardContent className="p-4 space-y-1">
                 <div>
