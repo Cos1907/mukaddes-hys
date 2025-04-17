@@ -13,7 +13,7 @@ interface Group {
 }
 
 export default function GrupPdfGoruntuleme() {
-  // ✅ State tipi tanımlı
+  // ✅ useState'e açık tip verildi
   const [groups, setGroups] = useState<Group[]>([]);
 
   useEffect(() => {
@@ -23,7 +23,6 @@ export default function GrupPdfGoruntuleme() {
       .catch((error) => console.error("Veri alınamadı:", error));
   }, []);
 
-  // ✅ Excel aktarım fonksiyonu
   const handleExportToExcel = () => {
     const worksheetData = groups.map((group) => ({
       "Grup Kodu": group.kod,
@@ -52,7 +51,6 @@ export default function GrupPdfGoruntuleme() {
     <div className="max-w-5xl mx-auto p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center">Tanımlı Hasta Grupları</h1>
 
-      {/* ✅ Excel Butonu */}
       <div className="flex justify-end mb-4">
         <button
           onClick={handleExportToExcel}
@@ -66,14 +64,16 @@ export default function GrupPdfGoruntuleme() {
         <p className="text-center text-gray-500">Hiç grup verisi bulunamadı.</p>
       ) : (
         <div className="space-y-6">
-          {groups.map((grp: Group, i: number) => (
+          {groups.map((grp: Group, i: number) => ( // 💥 burada tip net verildi
             <Card key={i} className="rounded-xl overflow-hidden shadow bg-white border">
               <CardContent className="p-4 space-y-3">
                 <div className="bg-red-100 text-red-800 text-center py-2 font-bold text-lg rounded">
                   Grup Adı / No: {grp.kod}
                 </div>
 
-                <div className="text-sm"><strong>Grup Sorumlusu:</strong> {grp.sorumlu}</div>
+                <div className="text-sm">
+                  <strong>Grup Sorumlusu:</strong> {grp.sorumlu}
+                </div>
 
                 <div className="text-sm font-semibold border-b py-1">Engelli Tanımlaması</div>
 
